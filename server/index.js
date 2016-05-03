@@ -34,7 +34,7 @@ app.get('/ring', function(req, res) {
     var uid = req.param('uid');
     console.log('got a GET request with uid' + uid);
     twilio.messages.create({
-        body: "Test Twilio",
+        body: "Bellacoola: Someone is at your door!!",
         to: "+13126191065",
         from: "+13123131547",
     },
