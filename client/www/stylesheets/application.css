@@ -1,3 +1,7 @@
 .body {
     text-align: center;
 }
+
+.logo {
+    max-width: 100%;
+}
