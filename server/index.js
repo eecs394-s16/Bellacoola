@@ -1,13 +1,3 @@
-/* index.js
- *
- * Root for the our RESTful API server code, currently contains all the methods here but we can move things out as we add more stuff
- *
- * Currently contains API for:
- *   /ring [GET]: Pi will send request to this with its uid (unique id)
- */
-
-// These are some npm modules that I'm going to use
-
 var twilio_sid = 'AC67d02b69024d1220fa46aed55ca25223',
     auth_token = 'ac69fa692fccfb0f96fb7915c45213b4',
     express = require('express'),
@@ -19,6 +9,19 @@ var twilio_sid = 'AC67d02b69024d1220fa46aed55ca25223',
 // Firebase Ref
 var userRef = new Firebase('https://bellacoola.firebaseio.com/settings');
 
+app.set('port', (process.env.PORT || 5000));
+
+app.use(express.static(__dirname + '/public'));
+
+// views is directory for all template files
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
+
+
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -27,8 +30,6 @@ app.all('*', function(req, res, next) {
 });
 
 app.use(bodyparser.json());
-
-app.listen(process.env.PORT || 5000);
 
 app.get('/ring', function(req, res) {
     var uid = req.param('uid');
