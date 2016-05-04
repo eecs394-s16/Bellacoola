@@ -7,6 +7,8 @@ $(document).ready(function() {
                 $.ajax({
                     method: 'GET',
                     url: 'http://localhost:5000/ring',
+                }, function() {
+                    console.log('done');
                 });
             } else {
                 var audio = new Audio('bell.mp3');
