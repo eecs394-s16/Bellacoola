@@ -4,16 +4,9 @@ angular.module('SteroidsApplication', [
 ])
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
-    $scope.test = function() {
-        supersonic.logger.log('test');
-    };
 })
 .controller('SilenceController', function($scope, supersonic) {
     $scope.navbarTitle = "Silence Settings";
-    $scope.test = function() {
-        supersonic.logger.log('test');
-    };
-
     $scope.update = function() {
         var currentTime = new Date(); // Gets current time
         var expireTime = currentTime;
@@ -53,9 +46,5 @@ angular.module('SteroidsApplication', [
                 supersonic.logger.log("Alert closed.");
             });
         });
-    }
-
-    var addMinutes = function(date, minutes) {
-        return new Date(date.getMinutes() + minutes);
     }
 });
