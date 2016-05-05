@@ -4,8 +4,6 @@
         <meta charset="utf8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-        <title>My Steroids App</title>
-
         <link rel="stylesheet" href="/components/supersonic/css/supersonic.css">
         <link rel="stylesheet" href="/stylesheets/application.css">
         <link rel="import" href="/components/supersonic/components/import.html">
@@ -26,38 +24,29 @@
     </head>
     <body ng-app="SteroidsApplication">
 
-        <div class="padding" ng-controller="IndexController">
-
+        <div class="padding" ng-controller="SilenceController">
             <super-navbar>
             <super-navbar-title ng-bind="navbarTitle">
             </super-navbar-title>
             </super-navbar>
 
+            <div class="row">
+                <div class="col col-50">
+                    <h3>Silence Mode</h3>
+                </div>
+                <div class="col col-50">
+                    <label class="toggle">
+                        <input type="checkbox" class="silence" ng-model="data.silence">
+                        <div class="track">
+                            <div class="handle"></div>
+                        </div>
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <img class="logo" src="assets/logo.png"></img>
-        </div>
-        <super-navigate location="silence.html">
-        <button class="button button-full button-assertive">
-            Silence Settings
+        <button class="button button-full button-positive" ng-click="update()">
+            Update Settings
         </button>
-        </super-navigate>
-        <super-navigate location="silence.html">
-        <button class="button button-full button-energized">
-            Buzztone Settings
-        </button>
-        </super-navigate>
-        <super-navigate location="silence.html">
-        <button class="button button-full button-balanced">
-            Weekly Settings 
-        </button>
-        </super-navigate>
-        <super-navigate location="silence.html">
-        <button class="button button-full button-balanced">
-            Weekly Settings 
-        </button>
-        </super-navigate>
-
     </div>
 </body>
 </html>
