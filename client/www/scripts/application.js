@@ -15,30 +15,30 @@ angular.module('SteroidsApplication', [
     };
 
     $scope.update = function() {
-        supersonic.logger.log('test');
-        supersonic.logger.log($scope.data.silence);
-        supersonic.logger.log($scope.data.duration);
-        supersonic.logger.log('test2');
-        var currentTime = Date.now();
-        var expireTime = Date.now();
-        suppersonic.logger.log(currentTime);
-        suppersonic.logger.log('testmore');
-        switch ($scope.data.duration) {
+        var currentTime = new Date(); // Gets current time
+        var expireTime = currentTime;
+        var minutesToAdd = 0;
+        switch ($scope.data.duration) { // Find out how many minutes to add
             case "30 Minutes":
-                expireTime = addMinutes(expireTime, 30);
+                minutesToAdd = 30;
                 break;
             case "1 Hour":
-                expireTime = addMinutes(expireTime, 60);
+                minutesToAdd = 60;
                 break;
             case "2 Hours":
-                expireTime = addMinutes(expireTime, 120);
+                minutesToAdd = 120;
                 break;
             case "3 Hours":
-                expireTime = addMinutes(expireTime, 180);
+                minutesToAdd = 180;
                 break;
         };
+        expireTime.setMinutes(currentTime.getMinutes() + minutesToAdd); // Update expiry time
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
-        piRef.set({
+        // TODO: This has hard-coded UID reference for the pi. 
+        // Eventually we'll have to do a lookup on the mobile part and figure out the UID of the Pi associated with this device 
+        // All that can probably be moved to the server as an API 
+        // Sorry I'll try to avoid these tech debts as much as possible from next time
+        piRef.set({ // Update firebase
             '1': {
                 'expiration_time': expireTime.toString(),
                 'contacts': ['+3126191065']
@@ -56,6 +56,6 @@ angular.module('SteroidsApplication', [
     }
 
     var addMinutes = function(date, minutes) {
-        return new Date(date.getTime() + minutes*60000);
+        return new Date(date.getMinutes() + minutes);
     }
 });
