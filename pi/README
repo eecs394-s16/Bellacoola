@@ -1,4 +1,16 @@
 Dependencies
 
 # Make sure you have these installed: 
-<a href="http://ozgur.github.io/python-firebase/">python-firebase</a>
+requests
+python-firebase
+
+
+# Howto
+
+```
+sudo pip install requests
+sudo pip install python-firebase
+```
+
+## Don't have pip?
+<a href="https://pypi.python.org/pypi/setuptools">Here</a>
