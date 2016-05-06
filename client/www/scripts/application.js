@@ -10,7 +10,7 @@ angular.module('SteroidsApplication', [
        
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
 
-        expireTime = new Date()
+        expireTime = new Date();
         expireTime.setMinutes(expireTime.getMinutes() -1); //1 min less than now
 
         piRef.set({
