@@ -36,7 +36,7 @@ app.use(bodyparser.json());
 app.get('/isSilent', function(req, res) {
     var uid = req.query.uid; 
     var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
-    piRef.child(uid).on('value', function(snapshot) {
+    piRef.child(uid).once('value', function(snapshot) {
         piSetting = snapshot.val();
         if (new Date(piSetting.expiration_time) > new Date()) {
             res.send('true')

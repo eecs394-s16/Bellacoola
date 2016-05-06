@@ -14,7 +14,8 @@ def ring(ringtone=''):
         It checks the current settings for this Pi and takes the appropriate action
     ''' 
     # Check current settings
-    setting = requests.get(ENDPOINT + '/isSilent?uid=' + str(UID)).text
+    query = { 'uid': str(UID) }
+    setting = requests.get(ENDPOINT + '/isSilent', params=query).text
 
     # Silent
     if setting == 'true':
