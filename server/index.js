@@ -28,9 +28,7 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-
 app.use(bodyparser.json());
-
 
 // Returns whether the Pi is in silence mode by checking the expiration time 
 // @param: uid [String]
