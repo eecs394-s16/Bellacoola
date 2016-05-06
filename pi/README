@@ -1,0 +1,16 @@
+Dependencies
+
+# Make sure you have these installed: 
+requests
+python-firebase
+
+
+# Howto
+
+```
+sudo pip install requests
+sudo pip install python-firebase
+```
+
+## Don't have pip?
+<a href="https://pypi.python.org/pypi/setuptools">Here</a>
