@@ -7,13 +7,11 @@ angular.module('SteroidsApplication', [
     $scope.navbarTitle = "Home";
 
     $scope.turn_off_silence_mode = function() {
-        supersonic.logger.log("turn_off_silence_mode() called");
-
-        currentTime = new Date();
-        expireTime = currentTime;
-        expireTime.setMinutes(currentTime.getMinutes() -1);
-
+       
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
+
+        expireTime = new Date()
+        expireTime.setMinutes(expireTime.getMinutes() -1); //1 min less than now
 
         piRef.set({
             '1': {
@@ -21,14 +19,12 @@ angular.module('SteroidsApplication', [
                 'contacts': ['+3126191065']
             }
         });
-        supersonic.logger.log("turn_off_silence_mode() -- firebase updated");
     }
 })
 
 .controller('SilenceController', function($scope, supersonic) {
     $scope.navbarTitle = "Silence Settings";
     $scope.update = function() {
-        supersonic.logger.log("update() called");
         var currentTime = new Date(); // Gets current time
         var expireTime = currentTime;
         var minutesToAdd = 0;
