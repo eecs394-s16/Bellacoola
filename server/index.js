@@ -21,7 +21,6 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -30,6 +29,22 @@ app.all('*', function(req, res, next) {
 });
 
 app.use(bodyparser.json());
+
+// Returns whether the Pi is in silence mode by checking the expiration time 
+// @param: uid [String]
+// @return: isSilent [boolean]
+app.get('/isSilent', function(req, res) {
+    var uid = req.query.uid; 
+    var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
+    piRef.child(uid).once('value', function(snapshot) {
+        piSetting = snapshot.val();
+        if (new Date(piSetting.expiration_time) > new Date()) {
+            res.send('true')
+        } else {
+            res.send('false')
+        }
+    });
+});
 
 app.get('/ring', function(req, res) {
     var uid = req.param('uid');
