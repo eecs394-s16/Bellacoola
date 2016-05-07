@@ -27,9 +27,9 @@ angular.module('SteroidsApplication', [
         };
         expireTime.setMinutes(currentTime.getMinutes() + minutesToAdd); // Update expiry time
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
-        // TODO: This has hard-coded UID reference for the pi. 
-        // Eventually we'll have to do a lookup on the mobile part and figure out the UID of the Pi associated with this device 
-        // All that can probably be moved to the server as an API 
+        // TODO: This has hard-coded UID reference for the pi.
+        // Eventually we'll have to do a lookup on the mobile part and figure out the UID of the Pi associated with this device
+        // All that can probably be moved to the server as an API
         // Sorry I'll try to avoid these tech debts as much as possible from next time
         piRef.set({ // Update firebase
             '1': {
@@ -46,5 +46,30 @@ angular.module('SteroidsApplication', [
                 supersonic.logger.log("Alert closed.");
             });
         });
+    }
+})
+.controller('ContactsController', function($scope, supersonic) {
+    $scope.navbarTitle = "Add Contacts";
+    $scope.addContact = function (){
+        var contactName = $scope.data.newname;
+        var contactNumber = $scope.data.newnumber;
+
+        var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
+        //var mobileContactListRef = mobileClientContactRef.push();
+        mobileClientContactRef.child(contactName).set({
+            phone:contactNumber
+        }, function(){
+            var options = {
+                message: "A new contact has been added!",
+                buttonLabel: "Ok"
+            };
+            supersonic.ui.dialog.alert("Update", options).then(function() {
+                supersonic.logger.log("Alert closed.");
+            });
+        });
+
+        $scope.data.newname = "";
+        $scope.data.newnumber = "";
+
     }
 });
