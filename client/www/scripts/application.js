@@ -2,6 +2,9 @@ angular.module('SteroidsApplication', [
     'supersonic',
     'firebase'
 ])
+.factory('ContactData', function(){
+    return { test:''};
+})
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
 })
@@ -48,12 +51,18 @@ angular.module('SteroidsApplication', [
         });
     }
 })
-.controller('ContactsController', function($scope, supersonic) {
+.controller('ContactsController', function($scope, ContactData, supersonic) {
+    supersonic.logger.log("factory!!!!");
     $scope.navbarTitle = "Add Contacts";
+    $scope.ContactData = ContactData;
+
     $scope.addContact = function (){
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
 
+        supersonic.logger.log("factory!!!!");
+        supersonic.logger.log($scope.ContactData.test);
+        
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         //var mobileContactListRef = mobileClientContactRef.push();
         mobileClientContactRef.child(contactName).set({
