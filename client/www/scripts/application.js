@@ -8,8 +8,9 @@ angular.module('SteroidsApplication', [
 .controller('SilenceController', function($scope, supersonic) {
     $scope.navbarTitle = "Silence Settings";
 
-    $scope.contacts = [];
+
     $scope.getContacts = function(){
+        $scope.contacts = [];
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
         contactsRef.on("child_added", function(snapshot){
@@ -109,7 +110,7 @@ angular.module('SteroidsApplication', [
 
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
-
+        if ($scope.validateInput()){
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         //var mobileContactListRef = mobileClientContactRef.push();
         mobileClientContactRef.child(contactName).set({
@@ -125,7 +126,17 @@ angular.module('SteroidsApplication', [
         });
 
         $scope.data.newname = "";
-        $scope.data.newnumber = "";
+        $scope.data.newnumber = "";}
+        else{
+            var options = {
+                     message: "One (or more) of your input is invalid!",
+                     buttonLabel: "Ok",
+            };
+            supersonic.ui.dialog.alert("ERROR", options).then(function() {
+                supersonic.logger.log("Alert closed.");
+            });
+            return;
+        }
     }
 
 });
