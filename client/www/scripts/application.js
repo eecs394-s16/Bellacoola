@@ -6,9 +6,7 @@ angular.module('SteroidsApplication', [
     $scope.navbarTitle = "Home";
 })
 .controller('SilenceController', function($scope, supersonic) {
-    supersonic.logger.log("what's up!");
     $scope.navbarTitle = "Silence Settings";
-
 
     $scope.contacts = [];
     $scope.getContacts = function(){
@@ -64,8 +62,51 @@ angular.module('SteroidsApplication', [
 })
 .controller('ContactsController', function($scope, supersonic) {
     $scope.navbarTitle = "Add Contacts";
+
+    var validateXSS = function(str){
+            // some basic xss tags to prevent
+            var xssCodes = ['&amp;', '&lt;', '&gt;', '&quot;', '&#x27;', '&#x2f;', '<script>', '\'', '\"'];
+
+            for (var i = 0; i < xssCodes.length; i++) {
+		            if (str.indexOf(xssCodes[i]) !== -1) {
+                    return false;
+		            }
+            }
+            return true;
+    }
+    var isNumber = function(n) {
+        // var numbers = /^[0-9]+$/;
+        // if (n.vlaue.match(numbers))
+        //     return true;
+        // else
+        //     return false;
+        return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;
+    }
+
+    var validate = function(input,type){
+      switch(type){
+            case String:
+		          return validateXSS(input);
+            case Number:
+		          return isNumber(input);
+      }
+    }
+
+    $scope.validateInput = function() {
+         if (!validate($scope.data.newname,String)){
+   		      return false;
+         } else if (!validate($scope.data.newnumber,Number)){
+   		      return false;
+           }
+           else {
+   		        return true;
+           }
+    };
+
     //TODO:Need to add the contact to pi-client and pi after each Pi is unique identified
-    $scope.addContact = function (){
+    $scope.addContact = function(){
+        supersonic.logger.log("wwwwwoooooo");
+
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
 
@@ -85,6 +126,6 @@ angular.module('SteroidsApplication', [
 
         $scope.data.newname = "";
         $scope.data.newnumber = "";
-
     }
+
 });
