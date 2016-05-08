@@ -2,14 +2,24 @@ angular.module('SteroidsApplication', [
     'supersonic',
     'firebase'
 ])
-.factory('ContactData', function(){
-    return { test:''};
-})
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
 })
 .controller('SilenceController', function($scope, supersonic) {
+    supersonic.logger.log("what's up!");
     $scope.navbarTitle = "Silence Settings";
+
+
+    $scope.contacts = [];
+    $scope.getContacts = function(){
+        supersonic.logger.log("getContacts called!");
+        var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
+        contactsRef.on("child_added", function(snapshot){
+                $scope.contacts.push(snapshot.key());
+                supersonic.logger.log($scope.contacts);
+        });
+    }
+
     $scope.update = function() {
         var currentTime = new Date(); // Gets current time
         var expireTime = currentTime;
@@ -50,19 +60,15 @@ angular.module('SteroidsApplication', [
             });
         });
     }
-})
-.controller('ContactsController', function($scope, ContactData, supersonic) {
-    supersonic.logger.log("factory!!!!");
-    $scope.navbarTitle = "Add Contacts";
-    $scope.ContactData = ContactData;
 
+})
+.controller('ContactsController', function($scope, supersonic) {
+    $scope.navbarTitle = "Add Contacts";
+    //TODO:Need to add the contact to pi-client and pi after each Pi is unique identified
     $scope.addContact = function (){
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
 
-        supersonic.logger.log("factory!!!!");
-        supersonic.logger.log($scope.ContactData.test);
-        
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         //var mobileContactListRef = mobileClientContactRef.push();
         mobileClientContactRef.child(contactName).set({

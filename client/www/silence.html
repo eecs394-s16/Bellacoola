@@ -57,13 +57,29 @@
                 </label>
             </div>
 
-            <div class="list list-people" ng-repeat="person in people track by $index"> <!-- List of people to notify -->
-                <label class="item item-input">
+            <!-- <div class="list list-people" ng-repeat="person in people track by $index">
                     <span class="input-label">Also Notify:</span>
                     <select ng-model="person.personName">
                         <option ng-repeat="contact in myContacts" value="{{contact}}">{{contact}}</option>
                     </select>
                 </label>
+            </div> -->
+            <div class="padding">
+                <h5>Notify your contacts <i class="icon super-android-contacts"></i> :</h5>
+
+            </div>
+
+            <div class="list">
+                <a class="item item-icon-left" href="#" ng-repeat="person in contacts">
+                    <i class="icon super-android-notifications"></i>
+                        {{person}}
+                        <label class="toggle">
+                            <input type="checkbox">
+                                <div class="track">
+                                    <div class="handle"></div>
+                                </div>
+                        </label>
+                </a>
             </div>
 
             <super-navigate location="contacts.html">
@@ -75,6 +91,12 @@
             <button class="button button-full button-positive" ng-click="update()">
                 Go Silent
             </button>
+
+            <button class="button button-full button-positive" ng-click="getContacts()">
+                Update
+            </button>
+
+
         </div>
     </body>
 </html>
