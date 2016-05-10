@@ -10,13 +10,24 @@ angular.module('SteroidsApplication', [
 
 
     $scope.getContacts = function(){
-        $scope.contacts = [];
+        var contacts = [];
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
-        contactsRef.on("child_added", function(snapshot){
-                $scope.contacts.push(snapshot.key());
-                supersonic.logger.log($scope.contacts);
+        // contactsRef.on("child_added", function(snapshot){
+        //         $scope.contacts.push(snapshot.key());
+        //         supersonic.logger.log($scope.contacts);
+        // });
+        contactsRef.on("value", function(snapshot){
+            allContacts = snapshot.val();
+            for (var contact in allContacts){
+                if (allContacts.hasOwnProperty(contact)){
+                    contacts.push(contact);
+                }
+            }
         });
+
+        $scope.contacts = contacts;
+        supersonic.logger.log($scope.contacts)
     }
 
     $scope.update = function() {
@@ -106,7 +117,6 @@ angular.module('SteroidsApplication', [
 
     //TODO:Need to add the contact to pi-client and pi after each Pi is unique identified
     $scope.addContact = function(){
-        supersonic.logger.log("wwwwwoooooo");
 
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
