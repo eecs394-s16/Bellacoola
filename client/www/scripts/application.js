@@ -16,7 +16,7 @@ angular.module('SteroidsApplication', [
         piRef.set({
             '1': {
                 'expiration_time' : expireTime.toString(),
-                'contacts': ['+3126191065']
+                'contacts': ['+13126191065']
             }
         });
     }
@@ -74,7 +74,7 @@ angular.module('SteroidsApplication', [
         piRef.set({ // Update firebase
             '1': {
                 'expiration_time': expireTime.toString(),
-                'contacts': ['+3126191065']
+                'contacts': ['+13126191065']
                 // TODO: Add contact numbers here
             }
         }, function() {

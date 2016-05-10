@@ -34,7 +34,8 @@ app.use(bodyparser.json());
 // @param: uid [String]
 // @return: isSilent [boolean]
 app.get('/isSilent', function(req, res) {
-    var uid = req.query.uid; 
+    //var uid = req.query.uid; 
+    var uid = 1;
     var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
     piRef.child(uid).once('value', function(snapshot) {
         piSetting = snapshot.val();

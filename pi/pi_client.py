@@ -2,8 +2,8 @@ import requests
 import firebase
 
 # server API endpoint
-ENDPOINT = 'http://desolate-scrubland-96510.herokuapp.com'
-#ENDPOINT = 'http://localhost:5000'
+#ENDPOINT = 'http://desolate-scrubland-96510.herokuapp.com'
+ENDPOINT = 'http://localhost:5000'
 
 # hard-coded Pi UID
 UID = 1
@@ -19,7 +19,7 @@ def ring(ringtone=''):
 
     # Silent
     if setting == 'true':
-        ring = requests.get(ENDPOINT + '/ring')
+        ring = requests.get(ENDPOINT + '/ring', params=query)
     else:
         print 'PLAY SOUND!!'
 
