@@ -33,22 +33,24 @@ angular.module('SteroidsApplication', [
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
 
         
-        piRef.child(uid).once('value', function(snapshot) {
+        piRef.child(uid).on('value', function(snapshot) {
         piSetting = snapshot.val();
         
-        $scope.mode = "!On!";
+        //$scope.mode = "!On!";
         supersonic.logger.log("callback");
+        var expr_date = new Date(piSetting.expiration_time)
 
-        /*if (new Date(piSetting.expiration_time) > new Date()) {
+        if (expr_date > new Date()) {
             $scope.mode = "On";
-            supersonic.logger.log("alarm on");    
+            supersonic.logger.log("alarm on");
+            $scope.expr_time = expr_date.toLocaleTimeString();
 
         } else {
             $scope.mode = "Off";
             supersonic.logger.log("alarm off");    
 
-        }*/
         }
+        });
 
         supersonic.logger.log("~getMode()");
     };

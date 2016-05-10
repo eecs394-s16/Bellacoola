@@ -44,6 +44,8 @@
         <div class="card">
           <div class="item item-text-wrap">
             Silent Mode: {{mode}}
+            <span ng-if="mode === 'On'">
+              Until {{expr_time}} </span>
           </div>
         </div>
 
