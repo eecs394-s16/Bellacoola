@@ -44,7 +44,7 @@ def ring(ringtone=''):
 
 if __name__ == '__main__':
     update_uid()
-    print update_uid
+    print UID
     while True:
         user = raw_input('Type anything to ring the bell')
         ring()
