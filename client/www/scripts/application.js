@@ -50,6 +50,7 @@ angular.module('SteroidsApplication', [
             supersonic.logger.log("alarm off");    
 
         }
+	    $scope.$apply();
         });
 
         supersonic.logger.log("~getMode()");
