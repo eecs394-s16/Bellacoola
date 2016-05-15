@@ -20,6 +20,45 @@ angular.module('SteroidsApplication', [
             }
         });
     }
+
+    $scope.get_status = function() {
+       
+        $scope.getMode();
+    }    
+
+    $scope.getMode = function(){
+        supersonic.logger.log("getMode()");
+        
+        var uid = 1;
+        var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
+
+        
+        piRef.child(uid).on('value', function(snapshot) {
+        piSetting = snapshot.val();
+        
+        //$scope.mode = "!On!";
+        supersonic.logger.log("callback");
+        var expr_date = new Date(piSetting.expiration_time)
+
+        if (expr_date > new Date()) {
+            $scope.mode = "On";
+            supersonic.logger.log("alarm on");
+            $scope.expr_time = expr_date.toLocaleTimeString();
+
+        } else {
+            $scope.mode = "Off";
+            supersonic.logger.log("alarm off");    
+
+        }
+	    $scope.$apply();
+        });
+
+        supersonic.logger.log("~getMode()");
+    };
+
+    //$scope.$watch('mode', $scope.getMode);
+
+    
 })
 
 .controller('SilenceController', function($scope, supersonic) {
