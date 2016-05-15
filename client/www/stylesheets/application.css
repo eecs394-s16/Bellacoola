@@ -5,3 +5,9 @@
 .logo {
     max-width: 100%;
 }
+
+input[type=time]{
+    font-size: medium;
+    padding-top:7px;
+    text-align:right;
+}

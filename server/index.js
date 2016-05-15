@@ -34,7 +34,8 @@ app.use(bodyparser.json());
 // @param: uid [String]
 // @return: isSilent [boolean]
 app.get('/isSilent', function(req, res) {
-    var uid = req.query.uid; 
+    //var uid = req.query.uid; 
+    var uid = 1;
     var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
     piRef.child(uid).once('value', function(snapshot) {
         piSetting = snapshot.val();
@@ -49,16 +50,21 @@ app.get('/isSilent', function(req, res) {
 app.get('/ring', function(req, res) {
     var uid = req.param('uid');
     console.log('got a GET request with uid' + uid);
-    twilio.messages.create({
-        body: "Bellacoola: Someone is at your door!!",
-        to: "+13126191065",
-        from: "+13123131547",
-    },
-    function(err, message) {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send('success!');
-        }
+    var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
+    var contactPromise = piRef.child(uid).child('contacts').once('value');
+    contactPromise.then(function(snapshot){
+	return snapshot.val().map(function(number){
+	    return twilio.messages.create({
+		body: "Bellacoola: Someone is at your door!!",
+		to: number,
+		from: "+13123131547"
+	    });
+	});
+    }).then(function(list){
+	Promise.all(list).then(function(msg){
+	    res.send('success!');
+	}).catch(function(err){
+	    console.log(err);
+	});
     });
 });

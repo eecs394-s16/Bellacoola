@@ -3,4 +3,5 @@
 ./client/bower_components
 ./client/logs
 ./client/dist
+server/node_modules/
 *.swp
