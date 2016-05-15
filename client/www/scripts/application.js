@@ -22,6 +22,27 @@ angular.module('SteroidsApplication', [
     }
 })
 
+.controller('DeviceController', function($scope, supersonic) {
+    $scope.navbarTitle = 'Device Settings';
+    var mobileRef = new Firebase('https://bellacoola.firebaseio.com/mobile');
+
+    $scope.updateNum = function() {
+        mobileRef.set({
+            '1': {
+                'number': '+1' + $scope.number
+            }
+        }, function() {
+            var options = {
+                message: "Updated your device settings",
+                buttonLabel: "Ok",
+            };
+            supersonic.ui.dialog.alert("Update Successful", options).then(function() {
+                supersonic.logger.log("Alert closed.");
+            });
+        });
+    }
+})
+
 .controller('SilenceController', function($scope, supersonic) {
     $scope.navbarTitle = "Silence Settings";
 
