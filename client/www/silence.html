@@ -23,26 +23,26 @@
         <script src="https://cdn.firebase.com/libs/angularfire/1.1.4/angularfire.min.js"></script>
     </head>
     <body ng-app="SteroidsApplication">
-        <div class="padding" ng-controller="SilenceController">
+        <div class="padding" ng-controller="SilenceController" ng-init="getMode()">
             <super-navbar>
             <super-navbar-title ng-bind="navbarTitle">
             </super-navbar-title>
             </super-navbar>
-
-            <div class="row">
-                <div class="col col-50">
-                    <h4>Silence Mode</h4>
-                </div>
-                <div class="col col-offset-25 col-25">
-                    <label class="toggle">
-                        <input type="checkbox" class="silence" ng-model="data.silence">
-                        <div class="track">
-                            <div class="handle"></div>
-                        </div>
-                    </label>
-                </div>
-            </div>
-
+	    <label class="item item-input item-toggle">
+	      <span class="input-label">Silence Mode</span>
+	      <span class="toggle">
+		<input type="checkbox" class="toggle" ng-model="data.isOn" ng-model-options="{ getterSetter: true}">
+		<div class="track">
+		  <div class="handle"></div>
+		</div>
+	      </span>
+	    </label>
+	    <label ng-if="data.isOn()" class="item item-input item-select">
+		<span class="input-label">
+		  Silent Until:
+		</span>
+		<input type="time" ng-model="data.getExpTime" ng-model-options="{ getterSetter: true }">
+	    </label> 
             <div class="list">
                 <label class="item item-input item-select">
                     <div class="input-label">
