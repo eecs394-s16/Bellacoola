@@ -70,7 +70,7 @@
             </div>
 
             <div class="list">
-                <a class="item item-icon-left" href="#" ng-repeat="person in contacts" ng-click="editContact(person)">
+                <a class="item item-icon-left" href="#" ng-repeat="person in contacts">
                     <i class="icon super-android-notifications"></i>
                         {{person}}
                         <span class="badge">
@@ -80,6 +80,9 @@
                                     <div class="handle"></div>
                                 </div>
                         </label>
+                        </span>
+                        <span class="badge">
+                            <i class="icon super-android-close" id="removeContact" ng-click="removeContact(person)"></i>
                         </span>
                 </a>
             </div>

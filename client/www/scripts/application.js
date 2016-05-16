@@ -64,6 +64,28 @@ angular.module('SteroidsApplication', [
 .controller('SilenceController', function($scope, supersonic) {
     $scope.navbarTitle = "Silence Settings";
 
+    var UID = 1; //hard-coded UID for the pi
+    $scope.removeContact = function(person){
+        var contactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/" + person);
+        var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/" + UID + "/contacts/" + person);
+        contactRef.set({
+            phone:null //remove the contact
+        }, function(){
+            var options = {
+                message: "Removed this contact!",
+                buttonLabel: "Ok"
+            };
+            supersonic.ui.dialog.alert("Update", options).then(function() {
+            supersonic.logger.log("Alert closed.");
+            });
+        });
+        piContactRef.set({
+            phone:null
+        });
+
+    //update the view
+        $scope.getContacts();
+    }
 
     $scope.getContacts = function(){
         var contacts = [];
