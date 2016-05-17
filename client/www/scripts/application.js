@@ -65,9 +65,6 @@ angular.module('SteroidsApplication', [
         
         piRef.child(uid).on('value', function(snapshot) {
         piSetting = snapshot.val();
-        
-        //$scope.mode = "!On!";
-        supersonic.logger.log("callback");
         var expr_date = new Date(piSetting.expiration_time)
 
         if (expr_date > new Date()) {
@@ -85,10 +82,6 @@ angular.module('SteroidsApplication', [
 
         supersonic.logger.log("~getMode()");
     };
-
-    //$scope.$watch('mode', $scope.getMode);
-
-    
 })
 
 .controller('DeviceController', function($scope, supersonic) {
@@ -127,10 +120,6 @@ angular.module('SteroidsApplication', [
         var contacts = [];
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
-        // contactsRef.on("child_added", function(snapshot){
-        //         $scope.contacts.push(snapshot.key());
-        //         supersonic.logger.log($scope.contacts);
-        // });
         contactsRef.on("value", function(snapshot){
             allContacts = snapshot.val();
             for (var contact in allContacts){
@@ -202,11 +191,6 @@ angular.module('SteroidsApplication', [
             return true;
     }
     var isNumber = function(n) {
-        // var numbers = /^[0-9]+$/;
-        // if (n.vlaue.match(numbers))
-        //     return true;
-        // else
-        //     return false;
         return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;
     }
 
@@ -237,7 +221,6 @@ angular.module('SteroidsApplication', [
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
-        //var mobileContactListRef = mobileClientContactRef.push();
         mobileClientContactRef.child(contactName).set({
             phone:contactNumber
         }, function(){
