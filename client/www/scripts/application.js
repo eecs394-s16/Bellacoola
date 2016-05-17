@@ -53,7 +53,6 @@ angular.module('SteroidsApplication', [
     }
 
     $scope.get_status = function() {
-       
         $scope.getMode();
     }    
 
@@ -113,17 +112,17 @@ angular.module('SteroidsApplication', [
     }
 })
 
-.controller('SilenceController', function($scope, supersonic) {
+.controller('SilenceController', function($scope, supersonic, getPiSettingsFactory) {
     $scope.navbarTitle = "Silence Settings";
 
     $scope.getMode = function(){
-	console.log("getMode called");
-	var uid = 1; //TODO: Get rid of hard coded uid
-	$scope.data = getPiSettingsFactory(uid);
-	$scope.data.dateobj = new Date($scope.data.expire_time);
-    $scope.getContacts();
+        supersonic.logger.log("getMode called");
+        var uid = 1; //TODO: Get rid of hard coded uid
+        $scope.data = getPiSettingsFactory(uid);
+        $scope.data.dateobj = new Date($scope.data.expire_time);
+        $scope.getContacts();
     };
-    
+
     $scope.getContacts = function(){
         var contacts = [];
         supersonic.logger.log("getContacts called!");
@@ -139,9 +138,10 @@ angular.module('SteroidsApplication', [
                     contacts.push(contact);
                 }
             }
+            $scope.contacts = contacts;
+            $scope.apply();
         });
 
-        $scope.contacts = contacts;
         supersonic.logger.log($scope.contacts)
     }
 
