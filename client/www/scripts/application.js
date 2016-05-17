@@ -9,12 +9,6 @@ angular.module('SteroidsApplication', [
 	isOn: function(){
 	    console.log("isOn called");
 	    return new Date(this.expiration_time ) > new Date();
-	},
-	getExpTime: function() {
-	    console.log("getExpTime called");
-	    dateobj.setTime(Date.parse(this.expiration_time));
-	    console.log(dateobj);
-	    return dateobj; 
 	}
     });
     return function(uid){
@@ -24,6 +18,22 @@ angular.module('SteroidsApplication', [
 	return new piSettingsObj(piRef);
     };
 }])
+
+.directive('processdate',function(){
+    return {
+	restrict: 'A',
+	require: 'ngModel',
+	link: function(scope,element, attrs, ngModel) {
+	    ngModel.$formatters.push(function(value){
+		return new Date(value);		
+	    });
+	    ngModel.$parsers.push(function(value){
+		return value.toString();
+	    });
+	}
+    };
+})
+
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
 

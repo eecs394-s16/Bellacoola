@@ -41,16 +41,8 @@
 	      <span class="input-label">
 		Silent Until:
 	      </span>
-	      <input type="time" ng-model="data.getExpTime" ng-model-options="{ getterSetter: true }">
+	      <input type="time" processdate ng-model="data.expiration_time">
 	    </label>
-	    <!--
-	    <label ng-if="data.isOn()" class="item item-input item-select">
-		<span class="input-label">
-		  Silent Until:
-		</span>
-		<input type="time" ng-model="data.getExpTime" ng-model-options="{ getterSetter: true }">
-	    </label> 
--->
             <div class="list">
                 <label class="item item-input item-select">
                     <div class="input-label">
