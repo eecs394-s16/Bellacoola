@@ -22,7 +22,7 @@ def ring(ringtone='bird'):
     if setting == 'true':
         ring = requests.get(ENDPOINT + '/ring', params=query)
     else:
-        print 'PLAY SOUND!!'
+        play_sound(requests.get(ENDPOINT + '/ringtone', params=query).text)
 
     
 def play_sound(ringtone):
@@ -34,10 +34,7 @@ def play_sound(ringtone):
 
 
 if __name__ == '__main__':
-    play_sound('bird')
-'''
     while True:
         user = raw_input('Type anything to ring the bell')
         ring()
-'''
     
