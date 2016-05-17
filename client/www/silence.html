@@ -37,12 +37,20 @@
 		</div>
 	      </span>
 	    </label>
+	    <label ng-if="data.isOn()" class="item item-input">
+	      <span class="input-label">
+		Silent Until:
+	      </span>
+	      <input type="time" ng-model="data.getExpTime" ng-model-options="{ getterSetter: true }">
+	    </label>
+	    <!--
 	    <label ng-if="data.isOn()" class="item item-input item-select">
 		<span class="input-label">
 		  Silent Until:
 		</span>
 		<input type="time" ng-model="data.getExpTime" ng-model-options="{ getterSetter: true }">
 	    </label> 
+-->
             <div class="list">
                 <label class="item item-input item-select">
                     <div class="input-label">

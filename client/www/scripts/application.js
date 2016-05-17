@@ -13,6 +13,7 @@ angular.module('SteroidsApplication', [
 	getExpTime: function() {
 	    console.log("getExpTime called");
 	    dateobj.setTime(Date.parse(this.expiration_time));
+	    console.log(dateobj);
 	    return dateobj; 
 	}
     });
