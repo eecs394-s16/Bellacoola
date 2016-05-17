@@ -90,6 +90,7 @@ angular.module('SteroidsApplication', [
 	var uid = 1; //TODO: Get rid of hard coded uid
 	$scope.data = getPiSettingsFactory(uid);
 	$scope.data.dateobj = new Date($scope.data.expire_time);
+    $scope.getContacts();
     };
     
     $scope.getContacts = function(){
