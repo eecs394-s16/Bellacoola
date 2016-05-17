@@ -3,6 +3,27 @@ angular.module('SteroidsApplication', [
     'firebase'
 ])
 
+.factory('getPiSettingsFactory',["$firebaseObject", function($firebaseObject){
+    var dateobj = new Date();
+    var piSettingsObj = $firebaseObject.$extend({
+	isOn: function(){
+	    console.log("isOn called");
+	    return new Date(this.expiration_time ) > new Date();
+	},
+	getExpTime: function() {
+	    console.log("getExpTime called");
+	    dateobj.setTime(Date.parse(this.expiration_time));
+	    console.log(dateobj);
+	    return dateobj; 
+	}
+    });
+    return function(uid){
+	console.log("factory function called");
+	var url = 'https://bellacoola.firebaseio.com/pi/'+uid+'/';
+	var piRef = new Firebase(url);
+	return new piSettingsObj(piRef);
+    };
+}])
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
 
@@ -61,10 +82,16 @@ angular.module('SteroidsApplication', [
     
 })
 
-.controller('SilenceController', function($scope, supersonic) {
+.controller('SilenceController', function($scope, getPiSettingsFactory,supersonic) {
     $scope.navbarTitle = "Silence Settings";
 
-
+    $scope.getMode = function(){
+	console.log("getMode called");
+	var uid = 1; //TODO: Get rid of hard coded uid
+	$scope.data = getPiSettingsFactory(uid);
+	$scope.data.dateobj = new Date($scope.data.expire_time);
+    };
+    
     $scope.getContacts = function(){
         var contacts = [];
         supersonic.logger.log("getContacts called!");
