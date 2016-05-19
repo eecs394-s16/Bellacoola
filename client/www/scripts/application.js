@@ -216,7 +216,7 @@ angular.module('SteroidsApplication', [
             return true;
     }
     var isNumber = function(n) {
-        return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;
+        return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0 && n.length == 10;
     }
 
     var validate = function(input,type){
