@@ -245,6 +245,7 @@ angular.module('SteroidsApplication', [
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
+	var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         mobileClientContactRef.child(contactName).set({
             phone:contactNumber
