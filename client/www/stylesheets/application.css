@@ -11,3 +11,7 @@ input[type=time]{
     padding-top:7px;
     text-align:right;
 }
+
+i.super-android-close{
+    color:red;
+}

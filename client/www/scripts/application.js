@@ -38,7 +38,7 @@ angular.module('SteroidsApplication', [
     $scope.navbarTitle = "Home";
 
     $scope.turn_off_silence_mode = function() {
-       
+
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
 
         expireTime = new Date();
@@ -54,17 +54,19 @@ angular.module('SteroidsApplication', [
 
     $scope.get_status = function() {
         $scope.getMode();
-    }    
+    }
 
     $scope.getMode = function(){
         supersonic.logger.log("getMode()");
-        
+
         var uid = 1;
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
 
-        
+
         piRef.child(uid).on('value', function(snapshot) {
         piSetting = snapshot.val();
+        //$scope.mode = "!On!";
+        supersonic.logger.log("callback");
         var expr_date = new Date(piSetting.expiration_time)
 
         if (expr_date > new Date()) {
@@ -74,7 +76,7 @@ angular.module('SteroidsApplication', [
 
         } else {
             $scope.mode = "Off";
-            supersonic.logger.log("alarm off");    
+            supersonic.logger.log("alarm off");
 
         }
 	    $scope.$apply();
@@ -87,7 +89,6 @@ angular.module('SteroidsApplication', [
 .controller('DeviceController', function($scope, supersonic) {
     $scope.navbarTitle = 'Device Settings';
     var mobileRef = new Firebase('https://bellacoola.firebaseio.com/mobile');
-
     $scope.updateNum = function() {
         mobileRef.set({
             '1': {
@@ -115,6 +116,29 @@ angular.module('SteroidsApplication', [
         $scope.data.dateobj = new Date($scope.data.expire_time);
         $scope.getContacts();
     };
+
+    var UID = 1; //hard-coded UID for the pi
+    $scope.removeContact = function(person){
+        var contactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/" + person);
+        var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/" + UID + "/contacts/" + person);
+        contactRef.set({
+            phone:null //remove the contact
+        }, function(){
+            var options = {
+                message: "Removed this contact!",
+                buttonLabel: "Ok"
+            };
+            supersonic.ui.dialog.alert("Update", options).then(function() {
+            supersonic.logger.log("Alert closed.");
+            });
+        });
+        piContactRef.set({
+            phone:null
+        });
+
+    //update the view
+        $scope.getContacts();
+    }
 
     $scope.getContacts = function(){
         var contacts = [];
@@ -178,6 +202,7 @@ angular.module('SteroidsApplication', [
 })
 .controller('ContactsController', function($scope, supersonic) {
     $scope.navbarTitle = "Add Contacts";
+    var UID = 1; //hard-coded UID for the pi
 
     var validateXSS = function(str){
             // some basic xss tags to prevent
@@ -230,21 +255,25 @@ angular.module('SteroidsApplication', [
             };
             supersonic.ui.dialog.alert("Update", options).then(function() {
                 supersonic.logger.log("Alert closed.");
+                });
             });
-        });
 
-        $scope.data.newname = "";
-        $scope.data.newnumber = "";}
-        else{
-            var options = {
-                     message: "One (or more) of your input is invalid!",
-                     buttonLabel: "Ok",
-            };
-            supersonic.ui.dialog.alert("ERROR", options).then(function() {
-                supersonic.logger.log("Alert closed.");
+            piContactRef.child(contactName).set({
+                phone:contactNumber
             });
-            return;
-        }
+
+            $scope.data.newname = "";
+            $scope.data.newnumber = "";}
+            else{
+                var options = {
+                         message: "One (or more) of your input is invalid!",
+                         buttonLabel: "Ok",
+                };
+                supersonic.ui.dialog.alert("ERROR", options).then(function() {
+                    supersonic.logger.log("Alert closed.");
+                });
+                return;
+            }
     }
 
 });
