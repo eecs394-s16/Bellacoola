@@ -31,13 +31,13 @@
 	    <label class="item item-input item-toggle">
 	      <span class="input-label">Silence Mode</span>
 	      <span class="toggle">
-		<input type="checkbox" class="toggle" ng-model="data.isOn" ng-model-options="{ getterSetter: true}">
+		<input type="checkbox" booldate class="toggle" ng-model="data.expiration_time">
 		<div class="track">
 		  <div class="handle"></div>
 		</div>
 	      </span>
 	    </label>
-	    <label ng-if="data.isOn()" class="item item-input">
+	    <label ng-if="obj.isOn()" class="item item-input">
 	      <span class="input-label">
 		Silent Until:
 	      </span>

@@ -4,7 +4,6 @@ angular.module('SteroidsApplication', [
 ])
 
 .factory('getPiSettingsFactory',["$firebaseObject", function($firebaseObject){
-    var dateobj = new Date();
     var piSettingsObj = $firebaseObject.$extend({
 	isOn: function(){
 	    console.log("isOn called");
@@ -28,7 +27,30 @@ angular.module('SteroidsApplication', [
 		return new Date(value);
 	    });
 	    ngModel.$parsers.push(function(value){
+		if (value < new Date())
+		    value.setDate(value.getDate()+1);
 		return value.toString();
+	    });
+	}
+    };
+})
+
+.directive('booldate',function(){
+    return {
+	restrict: 'A',
+	require: 'ngModel',
+	link: function(scope,element,attrs,ngModel){
+	    ngModel.$formatters.push(function(value){
+		return new Date(value) > new Date();
+	    });
+	    ngModel.$parsers.push(function(value){
+		var d = new Date();
+		if (value){
+		    d.setHours(d.getHours() + 1);
+		} else {
+		    d.setHours(d.getHours() - 1);
+		}
+		return d.toString();
 	    });
 	}
     };
@@ -130,8 +152,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
     $scope.getMode = function(){
         supersonic.logger.log("getMode called");
         var uid = 1; //TODO: Get rid of hard coded uid
-        $scope.data = getPiSettingsFactory(uid);
-        $scope.data.dateobj = new Date($scope.data.expire_time);
+	$scope.obj = getPiSettingsFactory(uid);
+	$scope.obj.$bindTo($scope,'data');
         $scope.getContacts();
     };
 
