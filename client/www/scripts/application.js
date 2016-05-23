@@ -3,11 +3,42 @@ angular.module('SteroidsApplication', [
     'firebase'
 ])
 
+.factory('getPiSettingsFactory',["$firebaseObject", function($firebaseObject){
+    var dateobj = new Date();
+    var piSettingsObj = $firebaseObject.$extend({
+	isOn: function(){
+	    console.log("isOn called");
+	    return new Date(this.expiration_time ) > new Date();
+	}
+    });
+    return function(uid){
+	console.log("factory function called");
+	var url = 'https://bellacoola.firebaseio.com/pi/'+uid+'/';
+	var piRef = new Firebase(url);
+	return new piSettingsObj(piRef);
+    };
+}])
+
+.directive('processdate',function(){
+    return {
+	restrict: 'A',
+	require: 'ngModel',
+	link: function(scope,element, attrs, ngModel) {
+	    ngModel.$formatters.push(function(value){
+		return new Date(value);		
+	    });
+	    ngModel.$parsers.push(function(value){
+		return value.toString();
+	    });
+	}
+    };
+})
+
 .controller('IndexController', function($scope, supersonic) {
     $scope.navbarTitle = "Home";
 
     $scope.turn_off_silence_mode = function() {
-       
+
         var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
 
         expireTime = new Date();
@@ -20,20 +51,119 @@ angular.module('SteroidsApplication', [
             }
         });
     }
+
+    $scope.get_status = function() {
+        $scope.getMode();
+    }
+
+    $scope.getMode = function(){
+        supersonic.logger.log("getMode()");
+
+        var uid = 1;
+        var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
+
+
+        piRef.child(uid).on('value', function(snapshot) {
+        piSetting = snapshot.val();
+        //$scope.mode = "!On!";
+        supersonic.logger.log("callback");
+        var expr_date = new Date(piSetting.expiration_time)
+
+        if (expr_date > new Date()) {
+            $scope.mode = "On";
+            supersonic.logger.log("alarm on");
+            $scope.expr_time = expr_date.toLocaleTimeString();
+
+        } else {
+            $scope.mode = "Off";
+            supersonic.logger.log("alarm off");
+
+        }
+	    $scope.$apply();
+        });
+
+        supersonic.logger.log("~getMode()");
+    };
 })
 
-.controller('SilenceController', function($scope, supersonic) {
+.controller('DeviceController', function($scope, supersonic) {
+    $scope.navbarTitle = 'Device Settings';
+    var mobileRef = new Firebase('https://bellacoola.firebaseio.com/mobile');
+    $scope.updateNum = function() {
+        mobileRef.set({
+            '1': {
+                'number': '+1' + $scope.number
+            }
+        }, function() {
+            var options = {
+                message: "Updated your device settings",
+                buttonLabel: "Ok",
+            };
+            supersonic.ui.dialog.alert("Update Successful", options).then(function() {
+                supersonic.logger.log("Alert closed.");
+            });
+        });
+    }
+})
+
+.controller('RingtoneController', function($scope, supersonic) {
+    $scope.navbarTitle = "Ringtone Settings";
+    $scope.updateRingtone = function() {
+        supersonic.logger.log('update ringtone called!');
+        var ringtoneRef = new Firebase('https://bellacoola.firebaseio.com/ringtone/');
+
+        ringtoneRef.set({
+            'ringtone': $scope.ringtone.replace(' ', '_'),
+        }, function() {
+            var options = {
+                message: "Ringtone successfully updated!",
+                buttonLabel: "Ok"
+            };
+            supersonic.ui.dialog.alert("Update", options).then(function() {
+                supersonic.logger.log("Alert closed.");
+            });
+        });
+    }
+})
+
+.controller('SilenceController', function($scope, supersonic, getPiSettingsFactory) {
     $scope.navbarTitle = "Silence Settings";
 
+    $scope.getMode = function(){
+        supersonic.logger.log("getMode called");
+        var uid = 1; //TODO: Get rid of hard coded uid
+        $scope.data = getPiSettingsFactory(uid);
+        $scope.data.dateobj = new Date($scope.data.expire_time);
+        $scope.getContacts();
+    };
+
+    var UID = 1; //hard-coded UID for the pi
+    $scope.removeContact = function(person){
+        var contactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/" + person);
+        var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/" + UID + "/contacts/" + person);
+        contactRef.set({
+            phone:null //remove the contact
+        }, function(){
+            var options = {
+                message: "Removed this contact!",
+                buttonLabel: "Ok"
+            };
+            supersonic.ui.dialog.alert("Update", options).then(function() {
+            supersonic.logger.log("Alert closed.");
+            });
+        });
+        piContactRef.set({
+            phone:null
+        });
+
+    //update the view
+        $scope.getContacts();
+    }
 
     $scope.getContacts = function(){
         var contacts = [];
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
-        // contactsRef.on("child_added", function(snapshot){
-        //         $scope.contacts.push(snapshot.key());
-        //         supersonic.logger.log($scope.contacts);
-        // });
         contactsRef.on("value", function(snapshot){
             allContacts = snapshot.val();
             for (var contact in allContacts){
@@ -41,9 +171,10 @@ angular.module('SteroidsApplication', [
                     contacts.push(contact);
                 }
             }
+            $scope.contacts = contacts;
+            $scope.apply();
         });
 
-        $scope.contacts = contacts;
         supersonic.logger.log($scope.contacts)
     }
 
@@ -91,6 +222,7 @@ angular.module('SteroidsApplication', [
 })
 .controller('ContactsController', function($scope, supersonic) {
     $scope.navbarTitle = "Add Contacts";
+    var UID = 1; //hard-coded UID for the pi
 
     var validateXSS = function(str){
             // some basic xss tags to prevent
@@ -104,12 +236,7 @@ angular.module('SteroidsApplication', [
             return true;
     }
     var isNumber = function(n) {
-        // var numbers = /^[0-9]+$/;
-        // if (n.vlaue.match(numbers))
-        //     return true;
-        // else
-        //     return false;
-        return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;
+        return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0 && n.length == 10;
     }
 
     var validate = function(input,type){
@@ -138,8 +265,8 @@ angular.module('SteroidsApplication', [
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
+	var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
-        //var mobileContactListRef = mobileClientContactRef.push();
         mobileClientContactRef.child(contactName).set({
             phone:contactNumber
         }, function(){
@@ -149,21 +276,25 @@ angular.module('SteroidsApplication', [
             };
             supersonic.ui.dialog.alert("Update", options).then(function() {
                 supersonic.logger.log("Alert closed.");
+                });
             });
-        });
 
-        $scope.data.newname = "";
-        $scope.data.newnumber = "";}
-        else{
-            var options = {
-                     message: "One (or more) of your input is invalid!",
-                     buttonLabel: "Ok",
-            };
-            supersonic.ui.dialog.alert("ERROR", options).then(function() {
-                supersonic.logger.log("Alert closed.");
+            piContactRef.child(contactName).set({
+                phone:contactNumber
             });
-            return;
-        }
+
+            $scope.data.newname = "";
+            $scope.data.newnumber = "";}
+            else{
+                var options = {
+                         message: "One (or more) of your input is invalid!",
+                         buttonLabel: "Ok",
+                };
+                supersonic.ui.dialog.alert("ERROR", options).then(function() {
+                    supersonic.logger.log("Alert closed.");
+                });
+                return;
+            }
     }
 
 });

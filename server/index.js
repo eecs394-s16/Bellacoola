@@ -47,6 +47,15 @@ app.get('/isSilent', function(req, res) {
     });
 });
 
+app.get('/ringtone', function(req, res) {
+    var uid = req.query.uid; 
+    var piRef = new Firebase('https://bellacoola.firebaseio.com/ringtone/');
+    piRef.child(uid).once('value', function(snapshot) {
+        piSetting = snapshot.val();
+        res.send(piSetting.ringtone);
+    });
+});
+
 app.get('/ring', function(req, res) {
     var uid = req.param('uid');
     console.log('got a GET request with uid' + uid);

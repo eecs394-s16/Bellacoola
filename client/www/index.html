@@ -26,7 +26,7 @@
     </head>
     <body ng-app="SteroidsApplication">
 
-        <div class="padding" ng-controller="IndexController">
+        <div class="padding" ng-controller="IndexController" ng-init="getMode()">
 
             <super-navbar>
             <super-navbar-title ng-bind="navbarTitle">
@@ -36,12 +36,21 @@
         <div class="row">
             <img class="logo" src="assets/logo.png"></img>
         </div>
+
+        <div class="card">
+          <div class="item item-text-wrap">
+            Silent Mode: {{mode}}
+            <span ng-if="mode === 'On'">
+              until {{expr_time}} </span>
+          </div>
+        </div>
+
         <super-navigate location="silence.html">
         <button class="button button-full button-assertive">
             Silence Settings
         </button>
         </super-navigate>
-        <super-navigate location="silence.html">
+        <super-navigate location="ringtone.html">
         <button class="button button-full button-energized">
             Buzztone Settings
         </button>
@@ -56,8 +65,13 @@
             Special Days
         </button>
         </super-navigate>
-        
-        <button class="button button-full button-calm" ng-click="turn_off_silence_mode()">
+        <super-navigate location="device.html">
+        <button class="button button-full button-calm">
+            Device Settings
+        </button>
+        </super-navigate>
+       
+        <button class="button button-full button-royal" ng-click="turn_off_silence_mode()">
             Turn Off Silence Mode
         </button>
         </div>
