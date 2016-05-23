@@ -25,7 +25,7 @@ angular.module('SteroidsApplication', [
 	require: 'ngModel',
 	link: function(scope,element, attrs, ngModel) {
 	    ngModel.$formatters.push(function(value){
-		return new Date(value);		
+		return new Date(value);
 	    });
 	    ngModel.$parsers.push(function(value){
 		return value.toString();
@@ -126,7 +126,8 @@ angular.module('SteroidsApplication', [
     }
 })
 
-.controller('SilenceController', function($scope, supersonic, getPiSettingsFactory) {
+.controller('SilenceController', ["$scope", "supersonic", "getPiSettingsFactory", "$firebaseObject",
+function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
     $scope.navbarTitle = "Silence Settings";
 
     $scope.getMode = function(){
@@ -164,18 +165,36 @@ angular.module('SteroidsApplication', [
         var contacts = [];
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
-        contactsRef.on("value", function(snapshot){
-            allContacts = snapshot.val();
-            for (var contact in allContacts){
-                if (allContacts.hasOwnProperty(contact)){
-                    contacts.push(contact);
-                }
-            }
-            $scope.contacts = contacts;
-            $scope.apply();
+        var objContact = $firebaseObject(contactsRef);
+        supersonic.logger.log("ABOUT TO CALL!")
+        objContact.$loaded().then(function(){
+            supersonic.logger.log("loaded record:", objContact)
+
+            angular.forEach(objContact, function(value, key){
+                supersonic.logger.log(key, value);
+                contacts.push(key);
+            });
+            //$scope.contacts = contacts;
+            objContact.$bindTo($scope, "contacts").then(function(){
+                supersonic.logger.log($scope.contacts)
+            });
+
+            //$scope.apply();
+            //supersonic.logger.log($scope.contacts)
         });
 
-        supersonic.logger.log($scope.contacts)
+        // contactsRef.on("value", function(snapshot){
+        //     allContacts = snapshot.val();
+        //     for (var contact in allContacts){
+        //         if (allContacts.hasOwnProperty(contact)){
+        //             contacts.push(contact);
+        //         }
+        //     }
+        //     $scope.contacts = contacts;
+        //     $scope.apply();
+        // });
+
+        //supersonic.logger.log($scope.contacts)
     }
 
     $scope.update = function() {
@@ -219,7 +238,7 @@ angular.module('SteroidsApplication', [
         });
     }
 
-})
+}])
 .controller('ContactsController', function($scope, supersonic) {
     $scope.navbarTitle = "Add Contacts";
     var UID = 1; //hard-coded UID for the pi
@@ -268,6 +287,7 @@ angular.module('SteroidsApplication', [
 	var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         mobileClientContactRef.child(contactName).set({
+            name:contactName,
             phone:contactNumber
         }, function(){
             var options = {
@@ -280,6 +300,7 @@ angular.module('SteroidsApplication', [
             });
 
             piContactRef.child(contactName).set({
+                name:contactName,
                 phone:contactNumber
             });
 
