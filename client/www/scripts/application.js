@@ -44,11 +44,8 @@ angular.module('SteroidsApplication', [
         expireTime = new Date();
         expireTime.setMinutes(expireTime.getMinutes() -1); //1 min less than now
 
-        piRef.set({
-            '1': {
+        piRef.child(1).update({
                 'expiration_time' : expireTime.toString(),
-                'contacts': ['+13126191065']
-            }
         });
     }
 
@@ -176,6 +173,20 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
             });
         });
 
+        //three-way binding to pi contacts list
+        var piRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts");
+        var objPi = $firebaseObject(piRef);
+
+        objPi.$loaded().then(function(){
+            supersonic.logger.log("PI! record:", objPi)
+
+            //three-way binding
+            objPi.$bindTo($scope, "contacts").then(function(){
+                supersonic.logger.log($scope.contacts)
+            });
+        });
+
+
     }
 
     $scope.update = function() {
@@ -202,12 +213,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
         // Eventually we'll have to do a lookup on the mobile part and figure out the UID of the Pi associated with this device
         // All that can probably be moved to the server as an API
         // Sorry I'll try to avoid these tech debts as much as possible from next time
-        piRef.set({ // Update firebase
-            '1': {
+        piRef.child(1).update({ // Update firebase
                 'expiration_time': expireTime.toString(),
-                'contacts': ['+13126191065']
-                // TODO: Add contact numbers here
-            }
         }, function() {
             var options = {
                 message: "Your silence settings has been updated!",
