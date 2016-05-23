@@ -161,40 +161,21 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
         $scope.getContacts();
     }
 
-    $scope.getContacts = function(){
-        var contacts = [];
+    $scope.getContacts = function() {
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
         var objContact = $firebaseObject(contactsRef);
         supersonic.logger.log("ABOUT TO CALL!")
+
         objContact.$loaded().then(function(){
             supersonic.logger.log("loaded record:", objContact)
 
-            angular.forEach(objContact, function(value, key){
-                supersonic.logger.log(key, value);
-                contacts.push(key);
-            });
-            //$scope.contacts = contacts;
+            //three-way binding
             objContact.$bindTo($scope, "contacts").then(function(){
                 supersonic.logger.log($scope.contacts)
             });
-
-            //$scope.apply();
-            //supersonic.logger.log($scope.contacts)
         });
 
-        // contactsRef.on("value", function(snapshot){
-        //     allContacts = snapshot.val();
-        //     for (var contact in allContacts){
-        //         if (allContacts.hasOwnProperty(contact)){
-        //             contacts.push(contact);
-        //         }
-        //     }
-        //     $scope.contacts = contacts;
-        //     $scope.apply();
-        // });
-
-        //supersonic.logger.log($scope.contacts)
     }
 
     $scope.update = function() {
@@ -280,7 +261,7 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
 
     //TODO:Need to add the contact to pi-client and pi after each Pi is unique identified
     $scope.addContact = function(){
-
+        var settings = "false"
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
@@ -288,7 +269,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         mobileClientContactRef.child(contactName).set({
             name:contactName,
-            phone:contactNumber
+            phone:contactNumber,
+            silence:settings
         }, function(){
             var options = {
                 message: "A new contact has been added!",
@@ -301,7 +283,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
 
             piContactRef.child(contactName).set({
                 name:contactName,
-                phone:contactNumber
+                phone:contactNumber,
+                silence:settings
             });
 
             $scope.data.newname = "";
