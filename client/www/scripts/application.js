@@ -157,6 +157,10 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
         $scope.getContacts();
     };
 
+    $scope.popView = function(){
+        supersonic.ui.layers.pop();
+    }
+
     var UID = 1; //hard-coded UID for the pi
     $scope.removeContact = function(person){
         var contactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/" + person);
