@@ -39,23 +39,23 @@
 	    </label>
 	    <label ng-if="obj.isOn()" class="item item-input">
 	      <span class="input-label">
-		Silent Until:
+		Silent Until (tap to change):
 	      </span>
 	      <input type="time" processdate ng-model="data.expiration_time">
 	    </label>
-            <div class="list">
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        Duration
-                    </div>
-                    <select ng-model="data.duration">
-                        <option>30 Minutes</option>
-                        <option selected>1 Hour</option>
-                        <option>2 Hours</option>
-                        <option>3 Hours</option>
-                    </select>
-                </label>
-            </div>
+
+            <label ng-if="!obj.isOn()" class="item item-input item-select">
+              <div class="input-label">
+                Duration
+              </div>
+              <select ng-model="data.duration">
+                <option>30 Minutes</option>
+                <option selected>1 Hour</option>
+                <option>2 Hours</option>
+                <option>3 Hours</option>
+              </select>
+            </label>
+
 
             <div class="padding">
                 <h5>Notify your contacts <i class="icon super-android-contacts"></i> :</h5>
