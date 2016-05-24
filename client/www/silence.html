@@ -65,17 +65,17 @@
             <div class="list">
                 <a class="item item-icon-left" href="#" ng-repeat="person in contacts">
                     <i class="icon super-android-notifications"></i>
-                        {{person}}
+                        {{person.name}}
                         <span class="badge">
                         <label class="toggle">
-                            <input type="checkbox">
+                            <input type="checkbox" ng-model="person.silence">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>
                         </label>
                         </span>
                         <span class="badge">
-                            <i class="icon super-android-close" id="removeContact" ng-click="removeContact(person)"></i>
+                            <i class="icon super-android-close" id="removeContact" ng-click="removeContact(person.name)"></i>
                         </span>
                 </a>
             </div>

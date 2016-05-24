@@ -25,7 +25,7 @@ angular.module('SteroidsApplication', [
 	require: 'ngModel',
 	link: function(scope,element, attrs, ngModel) {
 	    ngModel.$formatters.push(function(value){
-		return new Date(value);		
+		return new Date(value);
 	    });
 	    ngModel.$parsers.push(function(value){
 		return value.toString();
@@ -44,11 +44,8 @@ angular.module('SteroidsApplication', [
         expireTime = new Date();
         expireTime.setMinutes(expireTime.getMinutes() -1); //1 min less than now
 
-        piRef.set({
-            '1': {
+        piRef.child(1).update({
                 'expiration_time' : expireTime.toString(),
-                'contacts': ['+13126191065']
-            }
         });
     }
 
@@ -126,7 +123,8 @@ angular.module('SteroidsApplication', [
     }
 })
 
-.controller('SilenceController', function($scope, supersonic, getPiSettingsFactory) {
+.controller('SilenceController', ["$scope", "supersonic", "getPiSettingsFactory", "$firebaseObject",
+function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
     $scope.navbarTitle = "Silence Settings";
 
     $scope.getMode = function(){
@@ -160,22 +158,35 @@ angular.module('SteroidsApplication', [
         $scope.getContacts();
     }
 
-    $scope.getContacts = function(){
-        var contacts = [];
+    $scope.getContacts = function() {
         supersonic.logger.log("getContacts called!");
         var contactsRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts");
-        contactsRef.on("value", function(snapshot){
-            allContacts = snapshot.val();
-            for (var contact in allContacts){
-                if (allContacts.hasOwnProperty(contact)){
-                    contacts.push(contact);
-                }
-            }
-            $scope.contacts = contacts;
-            $scope.apply();
+        var objContact = $firebaseObject(contactsRef);
+        supersonic.logger.log("ABOUT TO CALL!")
+
+        objContact.$loaded().then(function(){
+            supersonic.logger.log("loaded record:", objContact)
+
+            //three-way binding
+            objContact.$bindTo($scope, "contacts").then(function(){
+                supersonic.logger.log($scope.contacts)
+            });
         });
 
-        supersonic.logger.log($scope.contacts)
+        //three-way binding to pi contacts list
+        var piRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts");
+        var objPi = $firebaseObject(piRef);
+
+        objPi.$loaded().then(function(){
+            supersonic.logger.log("PI! record:", objPi)
+
+            //three-way binding
+            objPi.$bindTo($scope, "contacts").then(function(){
+                supersonic.logger.log($scope.contacts)
+            });
+        });
+
+
     }
 
     $scope.update = function() {
@@ -202,12 +213,8 @@ angular.module('SteroidsApplication', [
         // Eventually we'll have to do a lookup on the mobile part and figure out the UID of the Pi associated with this device
         // All that can probably be moved to the server as an API
         // Sorry I'll try to avoid these tech debts as much as possible from next time
-        piRef.set({ // Update firebase
-            '1': {
+        piRef.child(1).update({ // Update firebase
                 'expiration_time': expireTime.toString(),
-                'contacts': ['+13126191065']
-                // TODO: Add contact numbers here
-            }
         }, function() {
             var options = {
                 message: "Your silence settings has been updated!",
@@ -219,7 +226,7 @@ angular.module('SteroidsApplication', [
         });
     }
 
-})
+}])
 .controller('ContactsController', function($scope, supersonic) {
     $scope.navbarTitle = "Add Contacts";
     var UID = 1; //hard-coded UID for the pi
@@ -261,14 +268,16 @@ angular.module('SteroidsApplication', [
 
     //TODO:Need to add the contact to pi-client and pi after each Pi is unique identified
     $scope.addContact = function(){
-
+        var settings = "false"
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
 	var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         mobileClientContactRef.child(contactName).set({
-            phone:contactNumber
+            name:contactName,
+            phone:contactNumber,
+            silence:settings
         }, function(){
             var options = {
                 message: "A new contact has been added!",
@@ -280,7 +289,9 @@ angular.module('SteroidsApplication', [
             });
 
             piContactRef.child(contactName).set({
-                phone:contactNumber
+                name:contactName,
+                phone:contactNumber,
+                silence:settings
             });
 
             $scope.data.newname = "";
