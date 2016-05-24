@@ -8,8 +8,8 @@
 
 input[type=time]{
     font-size: medium;
-    padding-top:7px;
     text-align:right;
+    display:inline-flex;
 }
 
 i.super-android-close{
