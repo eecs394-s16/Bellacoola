@@ -31,31 +31,31 @@
 	    <label class="item item-input item-toggle">
 	      <span class="input-label">Silence Mode</span>
 	      <span class="toggle">
-		<input type="checkbox" class="toggle" ng-model="data.isOn" ng-model-options="{ getterSetter: true}">
+		<input type="checkbox" booldate class="toggle" ng-model="data.expiration_time">
 		<div class="track">
 		  <div class="handle"></div>
 		</div>
 	      </span>
 	    </label>
-	    <label ng-if="data.isOn()" class="item item-input">
+	    <label ng-if="obj.isOn()" class="item item-input">
 	      <span class="input-label">
-		Silent Until:
+		Silent Until (tap to change):
 	      </span>
 	      <input type="time" processdate ng-model="data.expiration_time">
 	    </label>
-            <div class="list">
-                <label class="item item-input item-select">
-                    <div class="input-label">
-                        Duration
-                    </div>
-                    <select ng-model="data.duration">
-                        <option>30 Minutes</option>
-                        <option selected>1 Hour</option>
-                        <option>2 Hours</option>
-                        <option>3 Hours</option>
-                    </select>
-                </label>
-            </div>
+
+            <label ng-if="!obj.isOn()" class="item item-input item-select">
+              <div class="input-label">
+                Duration
+              </div>
+              <select ng-model="data.duration">
+                <option>30 Minutes</option>
+                <option selected>1 Hour</option>
+                <option>2 Hours</option>
+                <option>3 Hours</option>
+              </select>
+            </label>
+
 
             <div class="padding">
                 <h5>Notify your contacts <i class="icon super-android-contacts"></i> :</h5>
@@ -65,17 +65,17 @@
             <div class="list">
                 <a class="item item-icon-left" href="#" ng-repeat="person in contacts">
                     <i class="icon super-android-notifications"></i>
-                        {{person}}
+                        {{person.name}}
                         <span class="badge">
                         <label class="toggle">
-                            <input type="checkbox">
+                            <input type="checkbox" ng-model="person.silence">
                                 <div class="track">
                                     <div class="handle"></div>
                                 </div>
                         </label>
                         </span>
                         <span class="badge">
-                            <i class="icon super-android-close" id="removeContact" ng-click="removeContact(person)"></i>
+                            <i class="icon super-android-close" id="removeContact" ng-click="removeContact(person.name)"></i>
                         </span>
                 </a>
             </div>
@@ -85,11 +85,9 @@
                     Add New Contact
                 </button>
             </super-navigate>
-
-            <button class="button button-full button-positive" ng-click="update(); popView();">
+            <button class="button button-full button-balanced" ng-click="update(); popView();">
                 Go Silent
             </button>
-
         </div>
     </body>
 </html>
