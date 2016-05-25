@@ -62,13 +62,20 @@ app.get('/ring', function(req, res) {
     var piRef = new Firebase('https://bellacoola.firebaseio.com/pi/');
     var contactPromise = piRef.child(uid).child('contacts').once('value');
     contactPromise.then(function(snapshot){
-	return snapshot.val().map(function(number){
+	var contacts = [];
+	snapshot.forEach(function(child){
+	    contacts.push(child.val());
+	});
+	console.log(contacts);
+	return contacts.filter(function(contact){
+	    return contact.silence;
+	}).map(function(contact){
 	    return twilio.messages.create({
 		body: "Bellacoola: Someone is at your door!!",
-		to: number,
+		to: contact.phone,
 		from: "+13123131547"
-	    });
-	});
+		 });
+	});   
     }).then(function(list){
 	Promise.all(list).then(function(msg){
 	    res.send('success!');
