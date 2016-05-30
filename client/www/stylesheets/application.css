@@ -8,7 +8,9 @@
 
 input[type=time]{
     font-size: medium;
-    text-align:right;
+    padding-top: 3px;
+    padding-left: 10px
+    padding-right: 0px;
     display:inline-flex;
 }
 
