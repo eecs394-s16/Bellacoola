@@ -45,6 +45,7 @@ def ring(ringtone='bird'):
 
     
 def play_sound(ringtone):
+    ringtone = ringtone.replace(' ', '_')
     pygame.mixer.init()
     pygame.mixer.music.load('sounds/' + ringtone + '.wav')
     pygame.mixer.music.play()
