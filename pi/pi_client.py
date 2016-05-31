@@ -53,7 +53,7 @@ def play_sound(ringtone):
 
 
 if __name__ == '__main__':
-    update_uid()
+    #update_uid()
     print UID
     while True:
         user = raw_input('Type anything to ring the bell')
