@@ -45,6 +45,7 @@ def ring(ringtone='bird'):
 
     
 def play_sound(ringtone):
+    ringtone = ringtone.replace(' ', '_')
     pygame.mixer.init()
     pygame.mixer.music.load('sounds/' + ringtone + '.wav')
     pygame.mixer.music.play()
@@ -53,7 +54,7 @@ def play_sound(ringtone):
 
 
 if __name__ == '__main__':
-    update_uid()
+    #update_uid()
     print UID
     while True:
         user = raw_input('Type anything to ring the bell')

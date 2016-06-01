@@ -298,7 +298,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
         var contactName = $scope.data.newname;
         var contactNumber = $scope.data.newnumber;
         if ($scope.validateInput()){
-	var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
+	   
+       var piContactRef = new Firebase("https://bellacoola.firebaseio.com/pi/1/contacts/");
         var mobileClientContactRef = new Firebase("https://bellacoola.firebaseio.com/mobile_client/contacts/");
         mobileClientContactRef.child(contactName).set({
             name:contactName,
@@ -309,9 +310,7 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
                 message: "A new contact has been added!",
                 buttonLabel: "Ok"
             };
-            supersonic.ui.dialog.alert("Update", options).then(function() {
-                supersonic.logger.log("Alert closed.");
-                });
+            supersonic.ui.dialog.alert("Update", options).then(supersonic.ui.layers.pop);
             });
 
             piContactRef.child(contactName).set({
@@ -332,6 +331,8 @@ function($scope, supersonic, getPiSettingsFactory, $firebaseObject) {
                 });
                 return;
             }
+        
+        
     }
 
 });
