@@ -1,24 +1,43 @@
-## Repo for Team Orange Client Project - Bellacoola
+## ![pageres](client/www/assets/logo.png)
 
+Bellacoola -- A 21st Century Doorbell
+=====================================
 
-### Codebase Structure
+## DESCRIPTION
+
+Bellacoola is a mobile app that serves as the control center for your doorbell. You can:
+
+- Silence doorbell, and instead have notifications sent to users’ phones
+- Customize doorbell ring tone and playlist
+
+## SYSTEM REQUIREMENTS
+
+- Python 2.7+
+- Raspberry Pi (serves as doorbell)
+
+## INSTALLATION
+
+- You will need [Supersonic](http://docs.appgyver.com/supersonic/tutorial/first-mile/)
+- Navigate to Bellacoola/client:
+```bash
+$ steroids connect
+``` 
+
+## CODEBASE
 
 - Server: Server code hosted on Heroku, used as API endpoint
 - Client: Mobile Client
 - Pi: Client on Rasp. Pi
 
+## ACCOUNTS
 
-### Backend Structure
-Backend is essentially two huge JSOn
+- Firebase
+- Heroku
+- Twillio
 
-'Clients' = {
-    'key': unique_id,
-    'mode': call / text / [ring],
-    'pi': key_to_pi // Array of Raspberry pis that users are associated to
-}
+## LIMITATIONS
 
-'Pi' = { 
-    'key': unique_id,
-    'mode': call /text /[ring],
-    'pi': key_to_client // Client IDs that this pi is associated to (i.e. can support multiple devices with one Pi)
-}
+- Limited to one raspberry pi
+- Limited to pre-populated songs
+- Phones must be pre-registered in twilio
+
