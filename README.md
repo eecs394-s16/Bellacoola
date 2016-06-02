@@ -1,24 +1,30 @@
-## Repo for Team Orange Client Project - Bellacoola
+## Bellacoola - A 21st Century Doorbell
+
+What you have on your door is a 20th century doorbell - outdated, stupid, and sub-par. Bellacoola brings your doorbell to the 21st century tech wizardary. 
+
+Using a Raspberry Pi, Bellacoola can make your doorbell:
+
+- Silent whenever you need it to be (and send you an SMS text instead)
+
+
+- Customize your doorbell when you need it to be
+
 
 
 ### Codebase Structure
 
-- Server: Server code hosted on Heroku, used as API endpoint
-- Client: Mobile Client
-- Pi: Client on Rasp. Pi
+- Server: Server code hosted on Heroku, used as API endpoint to send text
+- Client: Mobile app
+- Pi: Client on Rasperry Pi
 
 
-### Backend Structure
-Backend is essentially two huge JSOn
+### Installing
+####Mobile Client: 
+TBU
 
-'Clients' = {
-    'key': unique_id,
-    'mode': call / text / [ring],
-    'pi': key_to_pi // Array of Raspberry pis that users are associated to
-}
 
-'Pi' = { 
-    'key': unique_id,
-    'mode': call /text /[ring],
-    'pi': key_to_client // Client IDs that this pi is associated to (i.e. can support multiple devices with one Pi)
-}
+#### Raspberry Pi
+```
+pip install requests
+
+
