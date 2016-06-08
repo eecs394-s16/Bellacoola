@@ -17,7 +17,6 @@ The repository is organized into three directories:
 - client: Mobile app for Android or iOS devices
 - pi: Client on Rasperry Pi to emulate a doorbell
 
-
 ### Installing
 To get the code run:
 
