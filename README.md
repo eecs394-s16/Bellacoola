@@ -43,9 +43,9 @@ steroids connect
 
 A browser tab should open with a QR code.
 
-#####Install on mobile:
+#####Install on mobile directly:
 - Download the Appgyver Scanner app
-- Scan the QR code 
+- Scan the QR code <a href="https://share.appgyver.com/?id=126672&hash=0e99c29ee0880334879450c47ce7b9042a7ebe5ca54d186a83a7b0477f27841a">here</a>
 
 ####Server:
 
@@ -56,9 +56,8 @@ A browser tab should open with a QR code.
 - Install the following:
 
 ```bash
-pip install requests
-pip install python-firebase
-pip install pygame
+sudo pip install requests
+sudo pip install python-firebase
 ```
 
 - Edit the ENDPOINT variable in pi_client.py to point to your Heroku URL
