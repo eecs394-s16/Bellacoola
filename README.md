@@ -1,11 +1,10 @@
 #### ![pageres](client/www/assets/logo.png)
 
 ## Bellacoola - A 21st Century Doorbell
-=====================================
 
 ### Description
 
-What you have on your door is a 20th century doorbell - outdated, stupid, and sub-par. Bellacoola brings your doorbell to the 21st century tech wizardary. 
+What you have on your door is a 20th century doorbell - outdated, stupid, and sub-par. Bellacoola brings your doorbell to the 21st century tech wizardry. 
 
 Using a Raspberry Pi, Bellacoola can make your doorbell:
 
@@ -27,28 +26,39 @@ git clone https://github.com/eecs394-s16/Bellacoola
 ### Building and Deploying
 
 ####Mobile Client: 
-Deploy:
+#####Deploy:
 - Install Supersonic following instructions here: http://www.appgyver.io/supersonic/
 - Install NodeJS 4 and NPM 2
--Run the following:
+- Run the following:
 
 ```bash
 npm install steroids -g
-# in the client directory
+# in the client directory:
 npm install 
 steroids connect
 ```
 
 A browser tab should open with a QR code.
 
-Install on mobile:
--Download the Appgyver Scanner app
--Scan the QR code 
+#####Install on mobile:
+- Download the Appgyver Scanner app
+- Scan the QR code 
 
+####Server:
 
 #### Raspberry Pi
+- Clone the code base
+- Install the following:
 
 ```bash
 pip install requests
+pip install python-firebase
+pip install pygame
 ```
 
+- Edit the ENDPOINT variable in pi_client.py to point to your Heroku URL
+- Run the following in the pi directory:
+
+```bash
+python pi_client.py
+```
