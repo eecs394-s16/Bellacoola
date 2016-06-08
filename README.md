@@ -12,18 +12,22 @@ Using a Raspberry Pi, Bellacoola can make your doorbell:
 - Customize doorbell ring tone and playlist
 
 ### Codebase Structure
-
-- server: Server code hosted on Heroku, used as API endpoint to send text
-- client: Mobile app for Android or iOS
-- pi: Client on Rasperry Pi
+The repository is organized into three directories:
+- server: Server code hosted on Heroku or locally, used as API endpoint to send text messages
+- client: Mobile app for Android or iOS devices
+- pi: Client on Rasperry Pi to emulate a doorbell
 
 
 ### Installing
+To get the code run:
+
 ```bash
 git clone https://github.com/eecs394-s16/Bellacoola
 ```
 
 ### Building and Deploying
+
+All 3 components of the app must be deployed for it to work.
 
 ####Mobile Client: 
 #####Deploy:
@@ -62,3 +66,10 @@ pip install pygame
 ```bash
 python pi_client.py
 ```
+
+####Known Limitations
+- System currently only works for a single doorbell
+- No support for separate user accounts or access control
+- Firebase URL is hard-coded and developer would need to replace references
+- No in-app support for initializing user data in Firebase - entries for users and doorbells currently must be created manually in the database
+
