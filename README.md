@@ -1,43 +1,78 @@
-## ![pageres](client/www/assets/logo.png)
+#### ![pageres](client/www/assets/logo.png)
 
-Bellacoola -- A 21st Century Doorbell
-=====================================
+## Bellacoola - A 21st Century Doorbell
 
-## DESCRIPTION
+### Description
 
-Bellacoola is a mobile app that serves as the control center for your doorbell. You can:
+What you have on your door is a 20th century doorbell - outdated, stupid, and sub-par. Bellacoola brings your doorbell to the 21st century tech wizardry. 
 
-- Silence doorbell, and instead have notifications sent to users’ phones
+Using a Raspberry Pi, Bellacoola can make your doorbell:
+
+- Silence doorbell, and instead have notifications sent to users' phones
 - Customize doorbell ring tone and playlist
 
-## SYSTEM REQUIREMENTS
+### Codebase Structure
+The repository is organized into three directories:
+- server: Server code hosted on Heroku or locally, used as API endpoint to send text messages
+- client: Mobile app for Android or iOS devices
+- pi: Client on Rasperry Pi to emulate a doorbell
 
-- Python 2.7+
-- Raspberry Pi (serves as doorbell)
+### Installing
+To get the code run:
 
-## INSTALLATION
-
-- You will need [Supersonic](http://docs.appgyver.com/supersonic/tutorial/first-mile/)
-- Navigate to Bellacoola/client:
 ```bash
-$ steroids connect
-``` 
+git clone https://github.com/eecs394-s16/Bellacoola
+```
 
-## CODEBASE
+### Building and Deploying
 
-- Server: Server code hosted on Heroku, used as API endpoint
-- Client: Mobile Client
-- Pi: Client on Rasp. Pi
+All 3 components of the app must be deployed for it to work.
 
-## ACCOUNTS
+####Mobile Client: 
+#####Deploy:
+- Install Supersonic following instructions [here](http://www.appgyver.io/supersonic/)
+- Install NodeJS 4 and NPM 2
+- Run the following:
 
-- Firebase
-- Heroku
-- Twillio
+```bash
+npm install steroids -g
+# in the client directory:
+npm install 
+steroids connect
+```
 
-## LIMITATIONS
+A browser tab should open with a QR code.
 
-- Limited to one raspberry pi
-- Limited to pre-populated songs
-- Phones must be pre-registered in twilio
+#####Install on mobile:
+- Download the Appgyver Scanner app
+- Scan the QR code 
 
+####Server:
+
+- To deploy to heroku from github, follow these [instructions](https://devcenter.heroku.com/articles/git)
+
+#### Raspberry Pi
+- Clone the code base
+- Install the following:
+
+```bash
+pip install requests
+pip install python-firebase
+pip install pygame
+```
+
+- Edit the ENDPOINT variable in pi_client.py to point to your Heroku URL
+- Run the following in the pi directory:
+
+```bash
+python pi_client.py
+```
+
+####Known Limitations
+- System currently only works for a single doorbell
+- No support for separate user accounts or access control
+- Firebase URL is hard-coded and developer would need to replace references
+- No in-app support for initializing user data in Firebase - entries for users and doorbells currently must be created manually in the database
+
+###Screenshot
+## ![pageres](Bellacoola_screenshot.png)
