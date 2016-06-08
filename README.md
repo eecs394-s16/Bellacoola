@@ -74,4 +74,5 @@ python pi_client.py
 - Firebase URL is hard-coded and developer would need to replace references
 - No in-app support for initializing user data in Firebase - entries for users and doorbells currently must be created manually in the database
 
+###Screenshot
 ## ![pageres](Bellacoola_screenshot.png)
