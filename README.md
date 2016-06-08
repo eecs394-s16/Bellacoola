@@ -31,7 +31,7 @@ All 3 components of the app must be deployed for it to work.
 
 ####Mobile Client: 
 #####Deploy:
-- Install Supersonic following instructions here: http://www.appgyver.io/supersonic/
+- Install Supersonic following instructions [here](http://www.appgyver.io/supersonic/)
 - Install NodeJS 4 and NPM 2
 - Run the following:
 
@@ -49,6 +49,8 @@ A browser tab should open with a QR code.
 - Scan the QR code 
 
 ####Server:
+
+- To deploy to heroku from github, follow these [instructions](https://devcenter.heroku.com/articles/git)
 
 #### Raspberry Pi
 - Clone the code base
