@@ -2,6 +2,9 @@
 
 ## Bellacoola - A 21st Century Doorbell
 
+## ![pageres](Bellacoola_screenshot.png)
+## ![pageres](Bellacoola_screenshot_2.png)
+
 ### Description
 
 What you have on your door is a 20th century doorbell - outdated, stupid, and sub-par. Bellacoola brings your doorbell to the 21st century tech wizardry. 
@@ -73,5 +76,4 @@ python pi_client.py
 - Firebase URL is hard-coded and developer would need to replace references
 - No in-app support for initializing user data in Firebase - entries for users and doorbells currently must be created manually in the database
 
-###Screenshot
-## ![pageres](Bellacoola_screenshot.png)
+
