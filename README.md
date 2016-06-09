@@ -3,7 +3,6 @@
 ## Bellacoola - A 21st Century Doorbell
 
 ## ![pageres](Bellacoola_screenshot.png)
-## ![pageres](Bellacoola_screenshot_2.png)
 
 ### Description
 
